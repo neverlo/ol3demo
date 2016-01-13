@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>加载Google地图（EPSG:900913）</title>
+    <style>
+        html, body, #map { height: 100%;width: 100%; margin: 0;}
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="../resources/jquery-2.2.0.min.js"></script>
+    <script src="../resources/ol/ol.js"></script>
+    <script>
+        var projection = ol.proj.get('EPSG:3857');
+        var transform = ol.proj.getTransform('EPSG:4326','EPSG:3857');
+        var mapUrl = 'http://10.148.123.231/dt/{z}/{x}/{y}.png';
+    
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.XYZ({
+                        maxZoom: 16,
+                        // tilePixelRatio: 1,
+                        projection: projection,
+                        tileSize: 256,
+                        tileUrlFunction: function(tileCoord){
+                            return mapUrl.replace('{z}', (tileCoord[0]).toString())
+                                         .replace('{x}', tileCoord[1].toString())
+                                         .replace('{y}', (-tileCoord[2]-1).toString());
+                        },
+                        wrapX: false
+                    })
+                })
+            ],
+            view: new ol.View({
+                projection: projection,
+                center: transform([113, 22.5]),
+                zoom:7,
+                minZoom: 4
+            })
+        });
+    </script>
+  </body>
+<html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>加载WMS图层</title>
+    <style>
+        html, body, #map { height: 100%;width: 100%; margin: 0;}
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="../resources/jquery-2.2.0.min.js"></script>
+    <script src="../resources/ol/ol.js"></script>
+    <script>
+        var projection = ol.proj.get('EPSG:3857');
+        var projectionNormal = ol.proj.get('EPSG:4326');
+        
+        var projectionExtent = projection.getExtent();
+        
+        var transform = ol.proj.getTransform('EPSG:4326','EPSG:3857');
+        var transformNormal = ol.proj.getTransform('EPSG:3857','EPSG:4326');
+        var mapUrl = 'http://10.148.123.231/dt/{z}/{x}/{y}.png';
+    
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.XYZ({
+                        maxZoom: 16,
+                        // tilePixelRatio: 1,
+                        projection: projection,
+                        tileSize: 256,
+                        tileUrlFunction: function(tileCoord){
+                            return mapUrl.replace('{z}', (tileCoord[0]).toString())
+                                         .replace('{x}', tileCoord[1].toString())
+                                         .replace('{y}', (-tileCoord[2]-1).toString());
+                        },
+                        wrapX: false
+                    })
+                })
+            ],
+            view: new ol.View({
+                projection: projection,
+                center: transform([113, 22.5]),
+                zoom:7,
+                minZoom: 4
+            })
+        });
+        
+        var modelWms = [
+            new ol.layer.Image({
+                 opacity:0.5,
+                 extent: projectionExtent,
+                 source: new ol.source.ImageWMS({
+                     url: 'http://10.148.123.231/dss-data/gis/gis!map.action',
+                     projection: projectionNormal,
+                     tilePixelRatio: 1,
+                     params: {
+                          LAYERS: 'ref',
+                          DATETIME:'2015-10-04_16_00',
+                          CHECKTIME:'2015-10-04_16_00',
+                          BBOX2: '104.77709805983392,18.997313630983374,120.19091641920186,26.595997169712717'
+                        //   BBOX2:transformNormal(BBOX)
+                     },
+                     style: 'normal',
+                     wrapX: true
+                 })
+             })
+        ];
+        map.addLayer(modelWms[0]);
+        var modelWmsObj =  modelWms[0].getSource();
+        modelWmsObj.on('imageloadstart', function(event){
+            var extentArr = event.image.extent;
+            extentArr = transformNormal(extentArr);
+            return modelWmsObj.getParams().BBOX2 = extentArr;
+        });
+    </script>
+  </body>
+<html>
