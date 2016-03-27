@@ -37,10 +37,33 @@
             view: new ol.View({
                 projection: projection,
                 center: transform([113, 22.5]),
-                zoom:3,
+                zoom:7,
                 minZoom: 0
             })
         });
+        
+        var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'blue',
+                lineDash: [4],
+                width: 3
+            }),
+            fill: new ol.style.Fill({
+                color: 'rgba(0, 0, 255, 0.1)'
+            })
+        });
+        
+        var topoJson  = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                format: new ol.format.TopoJSON({
+                    defaultProjection: 'EPSG:4326'
+                }),
+                projection: 'EPSG:3857',
+                url: 'json/440100.json'
+            }),
+            style: style
+        })
+        map.addLayer(topoJson);
     </script>
   </body>
 <html>
