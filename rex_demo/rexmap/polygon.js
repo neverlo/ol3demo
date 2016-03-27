@@ -18,6 +18,14 @@ polygon.prototype = {
             })
         });
         
+        var shadowStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: [0, 0, 127, 0.15],
+                width: 8
+            }),
+            zIndex: 1
+        });
+      
         var topoJson  = new ol.layer.Vector({
             source: new ol.source.Vector({
                 format: new ol.format.TopoJSON({
@@ -27,7 +35,7 @@ polygon.prototype = {
                 // projection: 'EPSG:3857',
                 url: tools.getRealPath()+'/rexmap/json/'+targetJson+'.json'
             }),
-            style: style
+            style: [shadowStyle, style]
         })
         this.map.addLayer(topoJson);
         return topoJson;
@@ -54,5 +62,42 @@ polygon.prototype = {
         });
         this.map.addLayer(vector);
         return vector;
+    },
+    drawPolygon: function(type,params){
+        var geom = null;
+        switch(type){
+            case 'point':
+                geom = new ol.geom.Point(params);
+                break;
+            case 'lineString':
+                geom = new ol.geom.LineString(params);
+                break;
+        }
+        geom.transform('EPSG:4326', 'EPSG:3857');
+        var feature = new ol.Feature({});
+        feature.setGeometry(geom);
+        return feature;
+    },
+    drawPoint: function (lon,lat) {
+        var params = [];
+        params[0] = lon;
+        params[1] = lat;
+        var feature = this.drawPolygon('point',params);
+        var vector_layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [feature]
+            })
+        });
+        this.map.addLayer(vector_layer);
+    },
+    drawLineString: function(){
+        var params = [[110, 20], [120, 10], [130, 20]];
+        var feature = this.drawPolygon('lineString',params);
+        var vector_layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [feature]
+            })
+        });
+        this.map.addLayer(vector_layer);
     }
 }

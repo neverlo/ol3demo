@@ -20,22 +20,39 @@
             target: 'map',
             url: 'http://127.0.0.1:8080/googlemap/dx/',
             minZoom: 0, maxZoom: 16, zoom: 6, tileSize: 256,
-            centerLon: 105, centerLat: 22.5
+            centerLon: 115, centerLat: 22.5
         }
         var map = new buildmap(params);
+        
+        //地图注册事件
         map.register('click',mapClick);
         function mapClick(params){
             console.info(params);
         }
         
-        var cityBounds = new polygon(map);
-        var gzLayer = cityBounds.drawBounds('440100');
-        cityBounds.extendToLayer(gzLayer);
+        //绘制行政区域边界
+        var polygon = new polygon(map);
+        var gzLayer = polygon.drawBounds('440100');
+        // polygon.extendToLayer(gzLayer);
+         // polygon.removeBounds(gzLayer);
+         
+        //绘制WKT格式geometry
         var wkt = 'POLYGON((110 15,111 ' +
           '18, 125 23,128 ' +
           '18, 110 15))';
-        cityBounds.drawWKT(wkt);
-        // cityBounds.removeBounds(gzLayer);
+        polygon.drawWKT(wkt);
+       
+        var linwkt = 'LINESTRING(120 15,121 ' +
+          '18, 115 23,118 ' +
+          '18)';
+        polygon.drawWKT(linwkt);
+        
+         var pointwkt = 'POINT(118 15.9)';
+        polygon.drawWKT(pointwkt);
+        
+        // polygon.drawPoint(115,20);
+        // polygon.drawPoint(118,20);
+        // polygon.drawLineString();
     </script>
   </body>
 <html>
