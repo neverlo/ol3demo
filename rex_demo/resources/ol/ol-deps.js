@@ -147,7 +147,7 @@ goog.addDependency('../../../ol/ol/pointer/nativesource.js', ['ol.pointer.Native
 goog.addDependency('../../../ol/ol/pointer/pointerevent.js', ['ol.pointer.PointerEvent'], ['ol.events', 'ol.events.Event'], false);
 goog.addDependency('../../../ol/ol/pointer/pointereventhandler.js', ['ol.pointer.PointerEventHandler'], ['goog.dom', 'ol.events', 'ol.events.EventTarget', 'ol.has', 'ol.pointer.MouseSource', 'ol.pointer.MsSource', 'ol.pointer.NativeSource', 'ol.pointer.PointerEvent', 'ol.pointer.TouchSource'], false);
 goog.addDependency('../../../ol/ol/pointer/touchsource.js', ['ol.pointer.TouchSource'], ['ol', 'ol.array', 'ol.pointer.EventSource', 'ol.pointer.MouseSource'], false);
-goog.addDependency('../../../ol/ol/proj/common.js', ['ol.proj.common'], ['ol.proj', 'ol.proj.EPSG3857', 'ol.proj.EPSG4326'], false);
+goog.addDependency('../../../ol/ol/proj/ADMIN.js', ['ol.proj.common'], ['ol.proj', 'ol.proj.EPSG3857', 'ol.proj.EPSG4326'], false);
 goog.addDependency('../../../ol/ol/proj/epsg3857projection.js', ['ol.proj.EPSG3857'], ['goog.asserts', 'ol.math', 'ol.proj', 'ol.proj.Projection', 'ol.proj.Units'], false);
 goog.addDependency('../../../ol/ol/proj/epsg4326projection.js', ['ol.proj.EPSG4326'], ['ol.proj', 'ol.proj.Projection', 'ol.proj.Units', 'ol.sphere.WGS84'], false);
 goog.addDependency('../../../ol/ol/proj/proj.js', ['ol.proj', 'ol.proj.METERS_PER_UNIT', 'ol.proj.Projection', 'ol.proj.ProjectionLike', 'ol.proj.Units'], ['goog.asserts', 'ol', 'ol.Extent', 'ol.TransformFunction', 'ol.extent', 'ol.object', 'ol.sphere.NORMAL'], false);

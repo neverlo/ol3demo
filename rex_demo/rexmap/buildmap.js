@@ -21,7 +21,14 @@ buildmap.prototype = {
         var projection = ol.proj.get('EPSG:3857');
         var transform = ol.proj.getTransform('EPSG:4326','EPSG:3857');
         var mapUrl = params.url + '{z}/{x}/{y}.png';
-    
+
+        var mapDocument = document.createElement('div');
+        mapDocument.setAttribute('id',params.target);
+        mapDocument.style.height = '100%';
+        mapDocument.style.width = '100%';
+        mapDocument.style.margin = '0';
+        (document.body).appendChild(mapDocument);
+
         var map = new ol.Map({
             target: params.target,
             layers: [

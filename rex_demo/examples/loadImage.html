@@ -47,6 +47,10 @@
             })
         });
         
+        var wmsParams = { LAYERS: 'ref',
+                          DATETIME:'2015-10-04_16_00',
+                          CHECKTIME:'2015-10-04_16_00',
+                          BBOX2:''};
         var modelWms = [
             new ol.layer.Image({
                  opacity:0.5,
@@ -55,26 +59,22 @@
                      url: 'http://10.148.123.231/dss-data/gis/gis!map.action',
                      projection: projectionNormal,
                      tilePixelRatio: 1,
-                     params: {
-                          LAYERS: 'ref',
-                          DATETIME:'2015-10-04_16_00',
-                          CHECKTIME:'2015-10-04_16_00',
-                        //   BBOX2:map.getBounds()
-                          BBOX2: '104.77709805983392,18.997313630983374,120.19091641920186,26.595997169712717'
-                        //   BBOX2:transformNormal(BBOX)
-                     },
+                     params: wmsParams,
                      style: 'normal',
                      wrapX: true
                  })
              })
         ];
+        
         map.addLayer(modelWms[0]);
-        var modelWmsObj =  modelWms[0].getSource();
-        modelWmsObj.on('imageloadstart', function(event){
-            var extentArr = event.image.extent;
-            extentArr = transformNormal(extentArr);
-            return modelWmsObj.getParams().BBOX2 = extentArr;
-        });
+        var extent = map.getView().calculateExtent(map.getSize());
+        wmsParams['BBOX2'] = transformNormal(extent).toString();
+        map.on('zoomend', checknewzoom);
+        map.on('moveend', checknewzoom);
+        function checknewzoom(){
+            var extent = map.getView().calculateExtent(map.getSize());
+            wmsParams['BBOX2'] = transformNormal(extent).toString();
+        }
     </script>
   </body>
 <html>

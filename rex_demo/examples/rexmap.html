@@ -4,21 +4,31 @@
     <meta charset="utf-8">
     <title>加载Google地图（EPSG:900913）</title>
     <style>
-        html, body, #map { height: 100%;width: 100%; margin: 0;}
+        html, body { height: 100%;width: 100%; margin: 0;}
     </style>
+    <link type="text/css" rel="stylesheet" href="../rexmap/layout.css"/>
   </head>
   <body>
-    <div id="map"></div>
+    <!--<div id="map"></div>-->
     <script src="../resources/jquery-2.2.0.min.js"></script>
+    <script src="../rexmap/tools.js"></script>
+    <script src="../rexmap/layout.js"></script>
     <script src="../resources/ol/ol.js"></script>
     <script src="../rexmap/buildmap.js"></script>
     <script src="../rexmap/polygon.js"></script>
-    <script src="../rexmap/common.js"></script>
+    <script src="../rexmap/ADMIN.js"></script>
     <script>
+        var admin = new ADMIN('440100');
+        console.info(admin.getParam('areaCode'));
+        console.info(admin.getNameByCode(admin.getParam('areaCode')));
+        console.info(admin.getCodeByName('广州市'));
+        var layout = new layout();
+        layout.initHeader();
+        layout.initSysBar(admin);
         //初始化地图属性
         var params = {
             target: 'map',
-            url: 'http://127.0.0.1:8080/googlemap/dx/',
+            url: 'http://10.148.123.231/dx/',
             minZoom: 0, maxZoom: 16, zoom: 6, tileSize: 256,
             centerLon: 115, centerLat: 22.5
         }
@@ -32,7 +42,7 @@
         
         //绘制行政区域边界
         var polygon = new polygon(map);
-        var gzLayer = polygon.drawBounds('440100');
+        var gzLayer = polygon.drawBounds(admin.getParam('areaCode'));
         // polygon.extendToLayer(gzLayer);
          // polygon.removeBounds(gzLayer);
          
